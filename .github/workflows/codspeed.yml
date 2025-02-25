@@ -27,7 +27,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
+      - name: Fix git owner
+        run: git config --global --add safe.directory "*"
+
       - uses: CodSpeedHQ/action@v3
         with:
           run: pytest --codspeed
           token: ${{ secrets.CODSPEED_TOKEN }} # Optional for public repositories
+        env:
+          INSTALLER_PRINT_VERBOSE: 1
