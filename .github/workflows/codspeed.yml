@@ -27,8 +27,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: Fix git owner
-        run: git config --global --add safe.directory "*"
+      - name: Env vars 1
+        run: env | sort
+
+      - name: Add .cargo/bin to PATH
+        run: echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Env vars 2
+        run: env | sort
 
       - uses: CodSpeedHQ/action@v3
         with:
