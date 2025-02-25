@@ -27,6 +27,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
+      # Fix "repository path is not owned by the current user"
+      - name: Fix git owner
+        run: git config --global --add safe.directory "*"
+
       - name: Env vars 1
         run: env | sort
 
