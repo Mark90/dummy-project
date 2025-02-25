@@ -9,21 +9,40 @@ on:
 jobs:
   codspeed:
     name: Run benchmarks
+    container:
+      image: python:3.13-slim
+      options: --privileged
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
+      # - name: Setup Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.13"
 
       - name: Install dependencies
         run: |
+          apt update && apt install curl -y
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
+
+      # Fix "repository path is not owned by the current user"
+      - name: Fix git owner
+        run: git config --global --add safe.directory "*"
+
+      - name: Env vars 1
+        run: env | sort
+
+      - name: Add .cargo/bin to PATH
+        run: echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Env vars 2
+        run: env | sort
 
       - uses: CodSpeedHQ/action@v3
         with:
           run: pytest --codspeed
           token: ${{ secrets.CODSPEED_TOKEN }} # Optional for public repositories
+        env:
+          INSTALLER_PRINT_VERBOSE: 1
