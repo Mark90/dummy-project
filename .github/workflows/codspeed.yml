@@ -9,7 +9,9 @@ on:
 jobs:
   codspeed:
     name: Run benchmarks
-    container: python:3.13-slim
+    container:
+      image: python:3.13
+      options: --privileged
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,6 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          apt update && apt install curl
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
