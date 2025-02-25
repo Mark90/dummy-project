@@ -10,7 +10,7 @@ jobs:
   codspeed:
     name: Run benchmarks
     container:
-      image: python:3.13
+      image: python:3.13-slim
       options: --privileged
     runs-on: ubuntu-latest
     steps:
